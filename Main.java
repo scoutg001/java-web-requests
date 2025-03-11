@@ -3,6 +3,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Main{
@@ -28,8 +29,22 @@ public class Main{
 
             String body=response.body();
             JSONObject weatherData=new JSONObject(body);
+
             JSONObject coord=weatherData.getJSONObject("coord");
-            System.out.println(coord.get("lon"));
+            double longitude=coord.getFloat("lon");
+
+            JSONObject main=weatherData.getJSONObject("main");
+            double tempKelvin=main.getFloat("temp");
+            double tempCelsius=tempKelvin-273.15;
+            double tempFarenheit=(tempCelsius*(9.0/5.0))+32;
+
+            JSONArray weather=weatherData.getJSONArray("weather");
+            String condition=weather.getJSONObject(0).getString("main");
+
+            System.out.println(longitude);
+            System.out.println(tempFarenheit);
+            System.out.println(condition);
+            //System.out.println(weatherData.toString());
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
