@@ -3,13 +3,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import org.json.*;
+import org.json.JSONObject;
 
 public class Main{
     public static void main(String[] args) {
-        System.out.println("Hello World");
+        //System.out.println("Hello World");
 
-        String openWeatherAPIKey="99a5d1d850690e43a203e9cd8fab257e";
+        String openWeatherAPIKey="ab1f35c03fe7cef3e679fa33d50fdd86";
         String lat="42.1255";
         String lon="-80.0843";
 
@@ -24,9 +24,12 @@ public class Main{
         try{
             HttpResponse<String>response=client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("Status code: "+response.statusCode());
-            System.out.println("Response body: "+response.body());
+            //System.out.println("Response body: "+response.body());
 
-            //JSON
+            String body=response.body();
+            JSONObject weatherData=new JSONObject(body);
+            JSONObject coord=weatherData.getJSONObject("coord");
+            System.out.println(coord.get("lon"));
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
