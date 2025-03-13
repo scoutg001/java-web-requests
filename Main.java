@@ -3,9 +3,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class Main{
     public static void main(String[] args) {
         //System.out.println("Hello World");
@@ -27,23 +24,10 @@ public class Main{
             System.out.println("Status code: "+response.statusCode());
             //System.out.println("Response body: "+response.body());
 
-            String body=response.body();
-            JSONObject weatherData=new JSONObject(body);
+            Weather weather=new OpenWeatherMapAPIParser(response.body());
 
-            JSONObject coord=weatherData.getJSONObject("coord");
-            double longitude=coord.getFloat("lon");
-
-            JSONObject main=weatherData.getJSONObject("main");
-            double tempKelvin=main.getFloat("temp");
-            double tempCelsius=tempKelvin-273.15;
-            double tempFarenheit=(tempCelsius*(9.0/5.0))+32;
-
-            JSONArray weather=weatherData.getJSONArray("weather");
-            String condition=weather.getJSONObject(0).getString("main");
-
-            System.out.println(longitude);
-            System.out.println(tempFarenheit);
-            System.out.println(condition);
+            System.out.println(weather.getTempurature(TempuratureUnit.FAHRENHEIT));
+            System.out.println(weather.getCondition());
             //System.out.println(weatherData.toString());
         }catch(Exception e){
             System.out.println(e.getMessage());
