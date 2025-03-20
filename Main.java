@@ -6,6 +6,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Random;
 
 public class Main{
     private static final long CACHE_DURATION=5*60*1000;
@@ -18,6 +19,7 @@ public class Main{
         String openWeatherAPIKey="ab1f35c03fe7cef3e679fa33d50fdd86";
         String lat="42.1255";
         String lon="-80.0843";
+        //String lon="80";
 
         String url=String.format("https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s", lat, lon, openWeatherAPIKey);
 
@@ -68,6 +70,7 @@ public class Main{
     }
 
     private static String getCache(String lat, String lon){
+        cleanup();
         System.out.println("Fetching cache from disk if it exists");
         try{
             File cacheFile=new File(String.format(CACHE_FILE, lat, lon));
@@ -82,5 +85,12 @@ public class Main{
             System.out.println("Error while getting cache:\n"+e.getMessage());
         }
         return null;
+    }
+
+    private static void cleanup(){
+        int randomNumber=new Random().nextInt(100);
+        if(randomNumber<5){
+            System.out.println("Cleaning house");
+        }
     }
 }
