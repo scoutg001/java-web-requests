@@ -1,5 +1,4 @@
 import org.json.JSONObject;
-import org.json.JSONArray;
 
 public class OpenWeatherMapAPIParser{
     public static double getTemperature(String json, TemperatureUnit unit){
@@ -7,19 +6,20 @@ public class OpenWeatherMapAPIParser{
         JSONObject main=rootData.getJSONObject("main");
         double temperature=main.getFloat("temp");
 
-        if(unit.equals(TemperatureUnit.CELSIUS)){
-            return temperature-273.15;
+        switch(unit){
+            case CELSIUS:
+                return temperature-273.15;
+            case FAHRENHEIT:
+                return ((temperature-273.15)*(9.0/5.0))+32;
+            default: //KELVIN
+                return temperature;
         }
-        if(unit.equals(TemperatureUnit.FAHRENHEIT)){
-            return ((temperature-273.15)*(9.0/5.0))+32;
-        }
-        return temperature;
     }
 
     public static String getCondition(String json){
-        JSONObject rootData=new JSONObject(json);
-        JSONArray weather=rootData.getJSONArray("weather");
-        String condition=weather.getJSONObject(0).getString("main");
-        return condition;
+        return new JSONObject(json)
+            .getJSONArray("weather")
+            .getJSONObject(0)
+            .getString("main");
     }
 }
