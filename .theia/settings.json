@@ -1,6 +1,0 @@
-{
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "/home/scoutg/Documents/java-libraries/json-20250107.jar"
-    ]
-}
