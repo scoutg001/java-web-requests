@@ -2,4 +2,4 @@
 .theia
 
 # Cache #
-cache.json
+cache*.json

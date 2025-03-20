@@ -9,7 +9,8 @@ import java.nio.file.Paths;
 
 public class Main{
     private static final long CACHE_DURATION=5*60*1000;
-    private static final String CACHE_FILE="cache.json";
+    //private static final long CACHE_DURATION=5*1000;
+    private static final String CACHE_FILE="cache-%s-%s.json";
     public static void main(String[] args) {
         //System.out.println("Hello World");
         System.out.println(System.currentTimeMillis());
@@ -18,22 +19,27 @@ public class Main{
         String lat="42.1255";
         String lon="-80.0843";
 
+        String url=String.format("https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s", lat, lon, openWeatherAPIKey);
+
         HttpClient client=HttpClient.newHttpClient();
 
         //HttpRequest request=HttpRequest.newBuilder().uri(URI.create("https://scoutg.tech/final-project")).GET().build();
 
         //HttpRequest request=HttpRequest.newBuilder().uri(URI.create("https://forecast.weather.gov/MapClick.php?lat=42.1255&lon=-80.0843&unit=0&lg=english&FcstType=text&TextType=1")).GET().build();
 
-        HttpRequest request=HttpRequest.newBuilder().uri(URI.create("https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid="+openWeatherAPIKey)).GET().build();
+        HttpRequest request=HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .GET()
+            .build();
 
         try{
-            String body=getCache();
+            String body=getCache(lat, lon);
 
             if(body==null){
                 HttpResponse<String>response=client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if(response.statusCode()==200)
-                    writeCache(response.body());
+                    writeCache(response.body(), lat, lon);
 
                 System.out.println("Status code: "+response.statusCode());
                 System.out.println("Response body: "+response.body());
@@ -41,37 +47,35 @@ public class Main{
                 body=response.body();
             }
 
-            Weather weather=new OpenWeatherMapAPIParser(body);
-
-            System.out.println(weather.getTempurature(TempuratureUnit.FAHRENHEIT));
-            System.out.println(weather.getCondition());
-            //System.out.println(weatherData.toString());
+            System.out.println(OpenWeatherMapAPIParser.getTempurature(body, TempuratureUnit.FAHRENHEIT));
+            System.out.println(OpenWeatherMapAPIParser.getCondition(body));
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
     }
 
-    private static void writeCache(String body){
+    private static void writeCache(String body, String lat, String lon){
         System.out.println("Saving cache to disk");
         try{
-            FileWriter writer=new FileWriter(CACHE_FILE);
+            FileWriter writer=new FileWriter(String.format(CACHE_FILE, lat, lon));
             writer.write(body);
             writer.flush();
+            writer.close();
             System.out.println("Saved cache to disk");
         }catch(Exception e){
             System.out.println("Error while writing cache to disk:\n"+e.getMessage());
         }
     }
 
-    private static String getCache(){
+    private static String getCache(String lat, String lon){
         System.out.println("Fetching cache from disk if it exists");
         try{
-            File cacheFile=new File(CACHE_FILE);
+            File cacheFile=new File(String.format(CACHE_FILE, lat, lon));
             if(cacheFile.exists()){
                 long lastModified=cacheFile.lastModified();
                 long currentTime=System.currentTimeMillis();
                 if(currentTime-lastModified<CACHE_DURATION){
-                    return Files.readString(Paths.get(CACHE_FILE));
+                    return Files.readString(Paths.get(String.format(CACHE_FILE, lat, lon)));
                 }
             }
         }catch(Exception e){
