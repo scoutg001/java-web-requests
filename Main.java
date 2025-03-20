@@ -49,7 +49,7 @@ public class Main{
                 body=response.body();
             }
 
-            System.out.println(OpenWeatherMapAPIParser.getTemperature(body, TempuratureUnit.FAHRENHEIT));
+            System.out.println(OpenWeatherMapAPIParser.getTemperature(body, TemperatureUnit.FAHRENHEIT));
             System.out.println(OpenWeatherMapAPIParser.getCondition(body));
         }catch(Exception e){
             System.out.println(e.getMessage());

@@ -1,4 +1,4 @@
-public enum TempuratureUnit {
+public enum TemperatureUnit {
     KELVIN,
     CELSIUS,
     FAHRENHEIT

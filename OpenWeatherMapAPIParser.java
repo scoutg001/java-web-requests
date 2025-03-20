@@ -2,15 +2,15 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 public class OpenWeatherMapAPIParser{
-    public static double getTemperature(String json, TempuratureUnit unit){
+    public static double getTemperature(String json, TemperatureUnit unit){
         JSONObject rootData=new JSONObject(json);
         JSONObject main=rootData.getJSONObject("main");
         double temperature=main.getFloat("temp");
 
-        if(unit.equals(TempuratureUnit.CELSIUS)){
+        if(unit.equals(TemperatureUnit.CELSIUS)){
             return temperature-273.15;
         }
-        if(unit.equals(TempuratureUnit.FAHRENHEIT)){
+        if(unit.equals(TemperatureUnit.FAHRENHEIT)){
             return ((temperature-273.15)*(9.0/5.0))+32;
         }
         return temperature;
