@@ -90,7 +90,7 @@ public class Main{
 
     private static void cleanup(){
         int randomNumber=new Random().nextInt(100);
-        if(randomNumber<5){
+        if(randomNumber<25){
             System.out.println("Cleaning house");
         }
     }
