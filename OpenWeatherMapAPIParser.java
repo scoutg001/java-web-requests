@@ -10,14 +10,7 @@ public class OpenWeatherMapAPIParser{
         }
         double temperature=main.optDouble("temp", 273.15); //returns 0 degrees celsius by default
 
-        switch(unit){
-            case CELSIUS:
-                return temperature-273.15;
-            case FAHRENHEIT:
-                return ((temperature-273.15)*(9.0/5.0))+32;
-            default: //KELVIN
-                return temperature;
-        }
+        return unit.convert(temperature);
     }
 
     public static String getCondition(String json){
