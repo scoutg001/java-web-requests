@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 public class Main{
-    private static final long CACHE_DURATION=5*60*1000;
-    //private static final long CACHE_DURATION=5*1000;
+    //private static final long CACHE_DURATION=5*60*1000;
+    private static final long CACHE_DURATION=5*1000;
     private static final String CACHE_FILE="cache-%s-%s.json";
     public static void main(String[] args) {
         //System.out.println("Hello World");
@@ -38,13 +38,14 @@ public class Main{
             String body=getCache(lat, lon);
 
             if(body==null){
+                System.out.println("Fetching weather data from api");
                 HttpResponse<String>response=client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if(response.statusCode()==200)
                     writeCache(response.body(), lat, lon);
 
-                System.out.println("Status code: "+response.statusCode());
-                System.out.println("Response body: "+response.body());
+                //System.out.println("Status code: "+response.statusCode());
+                //System.out.println("Response body: "+response.body());
 
                 body=response.body();
             }
@@ -78,12 +79,14 @@ public class Main{
                 long lastModified=cacheFile.lastModified();
                 long currentTime=System.currentTimeMillis();
                 if(currentTime-lastModified<CACHE_DURATION){
+                    System.out.println("Cache exists and is valid");
                     return Files.readString(Paths.get(String.format(CACHE_FILE, lat, lon)));
                 }
             }
         }catch(Exception e){
             System.out.println("Error while getting cache:\n"+e.getMessage());
         }
+        System.out.println("Cache does not exist or is not valid");
         return null;
     }
 
