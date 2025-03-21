@@ -50,7 +50,8 @@ public class Main{
             System.out.println(OpenWeatherMapAPIParser.getTemperature(body, TemperatureUnit.FAHRENHEIT));
             System.out.println(OpenWeatherMapAPIParser.getCondition(body));
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            System.err.println("Error fetching weather data: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
