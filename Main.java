@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 public class Main{
+    private static final String WEATHER_API_URL="https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s";
     //private static final long CACHE_DURATION=5*60*1000;
     private static final long CACHE_DURATION=5*1000;
     private static final String CACHE_FILE="cache-%s-%s.json";
@@ -21,13 +22,9 @@ public class Main{
         String lon="-80.0843";
         //String lon="80";
 
-        String url=String.format("https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s", lat, lon, openWeatherAPIKey);
+        String url=String.format(WEATHER_API_URL, lat, lon, openWeatherAPIKey);
 
         HttpClient client=HttpClient.newHttpClient();
-
-        //HttpRequest request=HttpRequest.newBuilder().uri(URI.create("https://scoutg.tech/final-project")).GET().build();
-
-        //HttpRequest request=HttpRequest.newBuilder().uri(URI.create("https://forecast.weather.gov/MapClick.php?lat=42.1255&lon=-80.0843&unit=0&lg=english&FcstType=text&TextType=1")).GET().build();
 
         HttpRequest request=HttpRequest.newBuilder()
             .uri(URI.create(url))
