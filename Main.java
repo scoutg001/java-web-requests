@@ -12,7 +12,7 @@ public class Main{
     private static final String WEATHER_API_URL="https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s";
     //private static final long CACHE_DURATION=5*60*1000;
     private static final long CACHE_DURATION=5*1000;
-    private static final String CACHE_FILE="cache-%s-%s.json";
+    private static final String CACHE_FILE="./cache/cache-%s-%s.json";
     public static void main(String[] args) {
         //System.out.println("Hello World");
         System.out.println(System.currentTimeMillis());
@@ -90,8 +90,21 @@ public class Main{
 
     private static void cleanup(){
         int randomNumber=new Random().nextInt(100);
-        if(randomNumber<25){
+        if(randomNumber<5){
             System.out.println("Cleaning house");
+            File cacheDir=new File("./cache/");
+            //long cutoffTime=7*24*60*60*1000;
+            long cutoffTime=1000;
+            File[]files=cacheDir.listFiles(
+                file -> file.isFile()&&
+                        file.getName().startsWith("cache")&&
+                        file.getName().endsWith(".json")&&
+                        System.currentTimeMillis()-file.lastModified()>cutoffTime
+            );
+            for(File file:files){
+                System.out.println("Deleting: "+file.getName());
+                file.delete();
+            }
         }
     }
 }
