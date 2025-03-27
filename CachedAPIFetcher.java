@@ -5,7 +5,7 @@ public class CachedAPIFetcher implements APIFetcher{
     private HashMap<String, String>cache;
 
     public CachedAPIFetcher(APIFetcher delegate){
-        this.fetcher=delegate;
+        this.fetcher=delegate;this.cache=new HashMap<>();
     }
 
     @Override
