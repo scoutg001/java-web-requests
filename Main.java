@@ -1,9 +1,5 @@
 import java.io.File;
 import java.io.FileWriter;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Random;
@@ -14,10 +10,8 @@ public class Main{
     //private static final long CACHE_DURATION=5*1000;
     private static final String CACHE_FILE="./cache/cache-%s-%s.json";
     private static final String CACHE_DIR="./cache/";
+    private static APIFetcher fetcher=new SimpleAPIFetcher();
     public static void main(String[] args) {
-        //System.out.println("Hello World");
-        System.out.println(System.currentTimeMillis());
-
         String openWeatherAPIKey="ab1f35c03fe7cef3e679fa33d50fdd86";
         String lat="42.1255";
         String lon="-80.0843";
@@ -25,35 +19,7 @@ public class Main{
 
         String url=String.format(WEATHER_API_URL, lat, lon, openWeatherAPIKey);
 
-        HttpClient client=HttpClient.newHttpClient();
-
-        HttpRequest request=HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .GET()
-            .build();
-
-        try{
-            String body=getCache(lat, lon);
-
-            if(body==null){
-                System.out.println("Fetching weather data from api");
-                HttpResponse<String>response=client.send(request, HttpResponse.BodyHandlers.ofString());
-
-                if(response.statusCode()==200)
-                    writeCache(response.body(), lat, lon);
-
-                //System.out.println("Status code: "+response.statusCode());
-                //System.out.println("Response body: "+response.body());
-
-                body=response.body();
-            }
-
-            System.out.println(OpenWeatherMapAPIParser.getTemperature(body, TemperatureUnit.FAHRENHEIT));
-            System.out.println(OpenWeatherMapAPIParser.getCondition(body));
-        }catch(Exception e){
-            System.err.println("Error fetching weather data: " + e.getMessage());
-            e.printStackTrace();
-        }
+        String json=fetcher.getURL(url);
     }
 
     private static void writeCache(String body, String lat, String lon){
@@ -95,7 +61,7 @@ public class Main{
         if(randomNumber<5){
             System.out.println("Cleaning house");
             File cacheDir=new File("./cache/");
-            long cutoffTime=7*24*60*60*1000;
+            long cutoffTime=2*24*60*60*1000;
             //long cutoffTime=1000;
             File[]files=cacheDir.listFiles(
                 file -> file.isFile()&&
