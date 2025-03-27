@@ -10,9 +10,10 @@ import java.util.Random;
 
 public class Main{
     private static final String WEATHER_API_URL="https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s";
-    //private static final long CACHE_DURATION=5*60*1000;
-    private static final long CACHE_DURATION=5*1000;
+    private static final long CACHE_DURATION=5*60*1000;
+    //private static final long CACHE_DURATION=5*1000;
     private static final String CACHE_FILE="./cache/cache-%s-%s.json";
+    private static final String CACHE_DIR="./cache/";
     public static void main(String[] args) {
         //System.out.println("Hello World");
         System.out.println(System.currentTimeMillis());
@@ -58,6 +59,7 @@ public class Main{
     private static void writeCache(String body, String lat, String lon){
         System.out.println("Saving cache to disk");
         try{
+            Files.createDirectories(Paths.get(CACHE_DIR));
             FileWriter writer=new FileWriter(String.format(CACHE_FILE, lat, lon));
             writer.write(body);
             writer.flush();
@@ -93,8 +95,8 @@ public class Main{
         if(randomNumber<5){
             System.out.println("Cleaning house");
             File cacheDir=new File("./cache/");
-            //long cutoffTime=7*24*60*60*1000;
-            long cutoffTime=1000;
+            long cutoffTime=7*24*60*60*1000;
+            //long cutoffTime=1000;
             File[]files=cacheDir.listFiles(
                 file -> file.isFile()&&
                         file.getName().startsWith("cache")&&
