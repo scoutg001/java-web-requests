@@ -22,6 +22,7 @@ public class SimpleAPIFetcher implements APIFetcher{
             System.err.println("Error fetching weather data: " + e.getMessage());
             e.printStackTrace();
         }
+        
         return null;
     }
 }
