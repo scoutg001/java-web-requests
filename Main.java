@@ -10,7 +10,11 @@ public class Main{
     //private static final long CACHE_DURATION=5*1000;
     private static final String CACHE_FILE="./cache/cache-%s-%s.json";
     private static final String CACHE_DIR="./cache/";
-    private static APIFetcher fetcher=new LoggedAPIFetcher(new CachedAPIFetcher(new SimpleAPIFetcher()));
+    private static APIFetcher fetcher=new RateLimitedAPIFetcher(
+        new LoggedAPIFetcher(
+        new CachedAPIFetcher(
+        new SimpleAPIFetcher()
+        )));
     public static void main(String[] args) {
         String openWeatherAPIKey="ab1f35c03fe7cef3e679fa33d50fdd86";
         String lat="42.1255";
