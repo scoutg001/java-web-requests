@@ -1,7 +1,7 @@
 import java.util.HashMap;
 
 public class LoggedAPIFetcher implements APIFetcher{
-    APIFetcher fetcher;
+    private APIFetcher fetcher;
     private HashMap<String, Integer>cache;
 
     public LoggedAPIFetcher(APIFetcher delegate){

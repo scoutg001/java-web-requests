@@ -13,9 +13,11 @@ public class CachedAPIFetcher implements APIFetcher{
 
     @Override
     public String getURL(String url){
-        if(cache.containsKey(url)&&cache.get(url).isValid(CACHE_DURATION)){
+        CacheObject<String>CachedObj=cache.get(url);
+
+        if(CachedObj!=null&&CachedObj.isValid(CACHE_DURATION)){
             System.out.println("Cache hit!");
-            return cache.get(url).getValue();
+            return CachedObj.getValue();
         }
 
         System.out.println("Cache miss!");
