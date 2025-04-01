@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 public class CachedAPIFetcher implements APIFetcher{
     private APIFetcher fetcher;
-    private HashMap<String, String>cache;
+    private HashMap<String, CacheObject<String>>cache;
 
     public CachedAPIFetcher(APIFetcher delegate){
         this.fetcher=delegate;this.cache=new HashMap<>();
@@ -12,13 +12,13 @@ public class CachedAPIFetcher implements APIFetcher{
     public String getURL(String url){
         if(cache.containsKey(url)){
             System.out.println("Cache hit!");
-            return cache.get(url);
+            return cache.get(url).getValue();
         }
 
         System.out.println("Cache miss!");
         String response=fetcher.getURL(url);
         if(response!=null){
-            cache.put(url, response);
+            cache.put(url, new CacheObject<String>(response));
             return response;
         }
 

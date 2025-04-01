@@ -2,6 +2,10 @@ public class CacheObject<T> {
     private T value;
     private long timestamp;
 
+    public CacheObject(T value){
+        this.value=value;this.timestamp=System.currentTimeMillis();
+    }
+
     public CacheObject(T value, long timestamp){
         this.value=value;this.timestamp=timestamp;
     }
