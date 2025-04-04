@@ -1,3 +1,3 @@
 public interface APIFetcher {
-    String getURL(String url);
+    FetcherResponse getURL(String url);
 }

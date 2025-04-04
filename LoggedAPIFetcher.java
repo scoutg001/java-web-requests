@@ -9,20 +9,21 @@ public class LoggedAPIFetcher implements APIFetcher{
     }
 
     @Override
-    public String getURL(String url){
+    public FetcherResponse getURL(String url){
+        String statusCode;
         if(cache.containsKey(url)){
             cache.replace(url, (cache.get(url)+1));
-            System.out.println("URL used "+cache.get(url)+" times: "+url);
+            statusCode="URL used "+cache.get(url)+" times: "+url;
         }else{
-            System.out.println("URL used 1 time: "+url);
+            statusCode="URL used 1 time: "+url;
         }
 
-        String response=fetcher.getURL(url);
+        FetcherResponse response=fetcher.getURL(url);
         if(response!=null){
             cache.put(url, 1);
-            return response;
+            return new FetcherResponse(response, statusCode);
         }
 
-        return null;
+        return new FetcherResponse(FetcherResponseStatus.ERROR);
     }
 }

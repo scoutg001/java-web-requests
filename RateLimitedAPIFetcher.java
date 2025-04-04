@@ -8,12 +8,13 @@ public class RateLimitedAPIFetcher implements APIFetcher{
     }
 
     @Override
-    public String getURL(String url){
+    public FetcherResponse getURL(String url){
         long currentTime=System.currentTimeMillis();
         if(currentTime-lastCalled>throttle_duration){
+            lastCalled=currentTime;
             return fetcher.getURL(url);
         }
-        //wait((currentTime-lastCalled)-throttle_duration);
-        return null;
+        
+        return new FetcherResponse(FetcherResponseStatus.WAIT);
     }
 }

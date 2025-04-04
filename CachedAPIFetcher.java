@@ -12,21 +12,19 @@ public class CachedAPIFetcher implements APIFetcher{
     }
 
     @Override
-    public String getURL(String url){
+    public FetcherResponse getURL(String url){
         CacheObject<String>CachedObj=cache.get(url);
 
         if(CachedObj!=null&&CachedObj.isValid(CACHE_DURATION)){
-            System.out.println("Cache hit!");
-            return CachedObj.getValue();
+            return new FetcherResponse(CachedObj.getValue(), "Cache hit!");
         }
 
-        System.out.println("Cache miss!");
-        String response=fetcher.getURL(url);
+        FetcherResponse response=fetcher.getURL(url);
         if(response!=null){
-            cache.put(url, new CacheObject<String>(response));
-            return response;
+            cache.put(url, new CacheObject<String>(response.getResponse()));
+            return new FetcherResponse(response, "Cache miss!");
         }
 
-        return null;
+        return new FetcherResponse(FetcherResponseStatus.ERROR);
     }
 }

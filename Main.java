@@ -1,36 +1,40 @@
-import java.io.File;
+/*import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Random;
+import java.util.Random;*/
 
 public class Main{
     private static final String WEATHER_API_URL="https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s";
-    private static final long CACHE_DURATION=5*60*1000;
+    //private static final long CACHE_DURATION=5*60*1000;
     //private static final long CACHE_DURATION=5*1000;
-    private static final String CACHE_FILE="./cache/cache-%s-%s.json";
-    private static final String CACHE_DIR="./cache/";
+    //private static final String CACHE_FILE="./cache/cache-%s-%s.json";
+    //private static final String CACHE_DIR="./cache/";
     private static APIFetcher fetcher=new RateLimitedAPIFetcher(
         new LoggedAPIFetcher(
         new CachedAPIFetcher(
         new SimpleAPIFetcher()
         )));
     public static void main(String[] args) {
-        String openWeatherAPIKey="ab1f35c03fe7cef3e679fa33d50fdd86";
+        String openWeatherAPIKey=System.getenv("OPENWEATHER_API_KEY");
+        if(openWeatherAPIKey==null||openWeatherAPIKey.isEmpty()){
+            throw new IllegalStateException("API key is missing! Set the environment variable OPENWEATHER_API_KEY.");
+        }
+
         String lat="42.1255";
         String lon="-80.0843";
         //String lon="80";
 
         String url=String.format(WEATHER_API_URL, lat, lon, openWeatherAPIKey);
 
-        String json=fetcher.getURL(url);
-        System.out.println(json);
+        String json=fetcher.getURL(url).getResponse();
+        System.out.println(OpenWeatherMapAPIParser.getCondition(json)+"\n"+OpenWeatherMapAPIParser.getTemperature(json, TemperatureUnit.FAHRENHEIT));
 
-        json=fetcher.getURL(url);
-        System.out.println(json);
+        json=fetcher.getURL(url).getResponse();
+        System.out.println(OpenWeatherMapAPIParser.getCondition(json)+"\n"+OpenWeatherMapAPIParser.getTemperature(json, TemperatureUnit.FAHRENHEIT));
     }
 
-    private static void writeCache(String body, String lat, String lon){
+    /*private static void writeCache(String body, String lat, String lon){
         System.out.println("Saving cache to disk");
         try{
             Files.createDirectories(Paths.get(CACHE_DIR));
@@ -82,5 +86,5 @@ public class Main{
                 file.delete();
             }
         }
-    }
+    }*/
 }
