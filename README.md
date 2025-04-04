@@ -8,7 +8,7 @@ This Java project is a **learning exercise** focused on implementing a modular s
 
 - **Modular Design** using the Decorator Pattern
 - **In-Memory Caching** to reduce redundant API calls
-- **Call Logging** for basic usage tracking
+- **Call Logging** for basic usage tracking (via `LoggedAPIFetcher`)
 - **Rate Limiting** support (via `RateLimitedAPIFetcher`)
 - **Flexible Parsing** using `OpenWeatherMapAPIParser`
 - **Extensible Architecture** (swap out `APIFetcher` implementations easily)
@@ -63,6 +63,8 @@ String url = String.format(WEATHER_API_URL, lat, lon, openWeatherAPIKey);
 
 FetcherResponse response = fetcher.getURL(url);
 ```
+
+Further usage can be found in the `Main` class.
 
 ## 📄 License
 
