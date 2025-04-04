@@ -25,6 +25,6 @@ public class CachedAPIFetcher implements APIFetcher{
             return new FetcherResponse(response, "Cache miss!");
         }
 
-        return new FetcherResponse(FetcherResponseStatus.ERROR);
+        return new FetcherResponse(FetcherResponseStatus.ERROR, "Unknown internal error");
     }
 }

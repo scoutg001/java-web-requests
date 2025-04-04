@@ -24,6 +24,6 @@ public class LoggedAPIFetcher implements APIFetcher{
             return new FetcherResponse(response, statusCode);
         }
 
-        return new FetcherResponse(FetcherResponseStatus.ERROR);
+        return new FetcherResponse(FetcherResponseStatus.ERROR, "Unknown internal error");
     }
 }

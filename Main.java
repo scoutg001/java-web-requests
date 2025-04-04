@@ -27,11 +27,23 @@ public class Main{
 
         String url=String.format(WEATHER_API_URL, lat, lon, openWeatherAPIKey);
 
-        String json=fetcher.getURL(url).getResponse();
-        System.out.println(OpenWeatherMapAPIParser.getCondition(json)+"\n"+OpenWeatherMapAPIParser.getTemperature(json, TemperatureUnit.FAHRENHEIT));
+        FetcherResponse response=fetcher.getURL(url);
+        if(response.getStatus()==FetcherResponseStatus.OK){
+            System.out.println(OpenWeatherMapAPIParser.getCondition(response.getResponse())+
+                "\n"+OpenWeatherMapAPIParser.getTemperature(response.getResponse(), TemperatureUnit.FAHRENHEIT)
+            );
+        }else{
+            System.out.println(response.getStatusCode());
+        }
 
-        json=fetcher.getURL(url).getResponse();
-        System.out.println(OpenWeatherMapAPIParser.getCondition(json)+"\n"+OpenWeatherMapAPIParser.getTemperature(json, TemperatureUnit.FAHRENHEIT));
+        response=fetcher.getURL(url);
+        if(response.getStatus()==FetcherResponseStatus.OK){
+            System.out.println(OpenWeatherMapAPIParser.getCondition(response.getResponse())+
+                "\n"+OpenWeatherMapAPIParser.getTemperature(response.getResponse(), TemperatureUnit.FAHRENHEIT)
+            );
+        }else{
+            System.out.println(response.getStatusCode());
+        }
     }
 
     /*private static void writeCache(String body, String lat, String lon){

@@ -25,6 +25,6 @@ public class SimpleAPIFetcher implements APIFetcher{
             e.printStackTrace();
         }
 
-        return new FetcherResponse(FetcherResponseStatus.ERROR);
+        return new FetcherResponse(FetcherResponseStatus.ERROR, "Unknown internal error");
     }
 }

@@ -15,6 +15,6 @@ public class RateLimitedAPIFetcher implements APIFetcher{
             return fetcher.getURL(url);
         }
         
-        return new FetcherResponse(FetcherResponseStatus.WAIT);
+        return new FetcherResponse(FetcherResponseStatus.WAIT, "Rate limit exceeded");
     }
 }
